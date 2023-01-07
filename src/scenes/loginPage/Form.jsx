@@ -58,11 +58,11 @@ const Form = () => {
   const register = async (values, onSubmitProps) => {
     // this allows us to send form info with image
     const formData = new FormData();
-    for (const value in values) {
+    for (let value in values) {
       formData.append(value, values[value]);
     }
-    console.log(formData);
     formData.append("picturePath", values.picture.name);
+
     const savedUserResponse = await fetch(
       "http://localhost:5000/auth/register",
       {
@@ -86,7 +86,6 @@ const Form = () => {
     });
     const loggedIn = await loggedInResponse.json();
     onSubmitProps.resetForm();
-
     if (loggedIn) {
       dispatch(
         setLogin({
@@ -99,12 +98,8 @@ const Form = () => {
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
-    if (isLogin) {
-      await login(values, onSubmitProps);
-    }
-    if (isRegister) {
-      await register(values, onSubmitProps);
-    }
+    if (isLogin) await login(values, onSubmitProps);
+    if (isRegister) await register(values, onSubmitProps);
   };
 
   return (
@@ -127,9 +122,9 @@ const Form = () => {
           <Box
             display="grid"
             gap="30px"
-            gridTemplateColumns="repeat(4, minmax(0,1fr))"
+            gridTemplateColumns="repeat(4, minmax(0, 1fr))"
             sx={{
-              "&>div": { gridColumn: isNonMobile ? undefined : "span 4" },
+              "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
             }}
           >
             {isRegister && (
@@ -195,6 +190,7 @@ const Form = () => {
                       <Box
                         {...getRootProps()}
                         border={`2px dashed ${palette.primary.main}`}
+                        p="1rem"
                         sx={{ "&:hover": { cursor: "pointer" } }}
                       >
                         <input {...getInputProps()} />
@@ -203,6 +199,7 @@ const Form = () => {
                         ) : (
                           <FlexBetween>
                             <Typography>{values.picture.name}</Typography>
+                            <EditOutlinedIcon />
                           </FlexBetween>
                         )}
                       </Box>
@@ -211,6 +208,7 @@ const Form = () => {
                 </Box>
               </>
             )}
+
             <TextField
               label="Email"
               onBlur={handleBlur}
@@ -234,7 +232,7 @@ const Form = () => {
             />
           </Box>
 
-          {/* Buttons */}
+          {/* BUTTONS */}
           <Box>
             <Button
               fullWidth
@@ -264,7 +262,7 @@ const Form = () => {
               }}
             >
               {isLogin
-                ? "Don't have an account? Sign Up here. "
+                ? "Don't have an account? Sign Up here."
                 : "Already have an account? Login here."}
             </Typography>
           </Box>
